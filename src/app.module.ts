@@ -6,9 +6,11 @@ import { AuthModule } from './auth/auth.module';
 import { UserService } from './user/user.service';
 import { PrismaService } from './prisma.service';
 import { LoggerMiddleware } from './logger.middleware';
+import { PostModule } from './post/post.module';
+import { CommentModule } from './comment/comment.module';
 
 @Module({
-  imports: [UserModule, AuthModule],
+  imports: [UserModule, AuthModule, PostModule, CommentModule],
   controllers: [AppController],
   providers: [AppService, UserService, PrismaService],
 })
