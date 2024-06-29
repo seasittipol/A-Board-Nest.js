@@ -10,15 +10,19 @@ import {
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { User } from '@prisma/client';
+
+const bcrypt = require('bcryptjs');
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
+  async create(@Body() createUserDto: CreateUserDto) {
+    createUserDto.password = await bcrypt.hash(createUserDto.password, 10);
+    const user = await this.userService.create(createUserDto);
+    const { password, ...result } = user;
+    return result;
   }
 
   @Get()
