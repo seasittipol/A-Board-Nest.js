@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  BadRequestException,
+} from '@nestjs/common';
 import { CommentService } from './comment.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
@@ -9,6 +18,9 @@ export class CommentController {
 
   @Post()
   create(@Body() createCommentDto: CreateCommentDto) {
+    if (createCommentDto.description === '') {
+      throw new BadRequestException();
+    }
     return this.commentService.create(createCommentDto);
   }
 

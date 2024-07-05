@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  BadRequestException,
 } from '@nestjs/common';
 import { PostService } from './post.service';
 import { CreatePostDto } from './dto/create-post.dto';
@@ -17,6 +18,14 @@ export class PostController {
 
   @Post()
   create(@Body() createPostDto: CreatePostDto) {
+    console.log(createPostDto);
+    if (
+      createPostDto.category === 'Choose a community' ||
+      createPostDto.body === '' ||
+      createPostDto.title === ''
+    ) {
+      throw new BadRequestException();
+    }
     return this.postService.create(createPostDto);
   }
 
@@ -36,6 +45,13 @@ export class PostController {
   }
   @Patch(':id')
   update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
+    if (
+      updatePostDto.category === 'Choose a community' ||
+      updatePostDto.body === '' ||
+      updatePostDto.title === ''
+    ) {
+      throw new BadRequestException();
+    }
     return this.postService.update(+id, updatePostDto);
   }
 
